@@ -19,6 +19,8 @@
     "@react-navigation/stack": "^6.3.17",
     "@realm/react": "^0.5.2",
     "axios": "^1.4.0",
+    "date-fns": "^2.30.0",
+    "date-fns-tz": "^2.0.0",
     "expo": "^49.0.7",
     "expo-blur": "~12.4.1",
     "expo-camera": "^13.4.2",

@@ -28,9 +28,9 @@ export const StepOne = ({ control, errors }: StepProps) => {
     },
   ]
     return (
-      <View>
+      <View  style={{ gap: 10 }}>
         <TextInput.Root error={errors.tom} label='Tonalidade *'> 
-          <TextInput.Icon icon={'cog'} />
+          {/* <TextInput.Icon icon={'cog'} /> */}
           <ControlledInput 
             name='tom'
             control={control}
@@ -39,7 +39,7 @@ export const StepOne = ({ control, errors }: StepProps) => {
           />
         </TextInput.Root>
         <TextInput.Root error={errors.tonality} label='Tonalidade *'> 
-          <TextInput.Icon icon={'cog'} />
+          {/* <TextInput.Icon icon={'cog'} /> */}
           <ControlledInput 
             name='tonality'
             control={control}
@@ -47,7 +47,7 @@ export const StepOne = ({ control, errors }: StepProps) => {
           />
         </TextInput.Root>
         <TextInput.Root error={errors.texture} label='Textura *'> 
-          <TextInput.Icon icon={'cog'} />
+          {/* <TextInput.Icon icon={'cog'} /> */}
           <ControlledInput 
             name='texture'
             control={control}
@@ -56,11 +56,6 @@ export const StepOne = ({ control, errors }: StepProps) => {
         </TextInput.Root>
         <Select.Root error={errors.shine} label='Selecione o bilho *'> 
           <ControlledSelect item={item} control={control} name="shine"  />
-          {/* <ControlledInput 
-            name='shine'
-            control={control}
-            placeholder='Insira um valor'
-          /> */}
         </Select.Root>
       </View>
     );

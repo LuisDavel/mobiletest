@@ -7,7 +7,7 @@ import CardModulesRoot from '../../components/CardModules/CardModulesRoot';
 import CardModulesContent from '../../components/CardModules/CardModulesContent';
 import CardModulesIcon from '../../components/CardModules/CardModulesIcon';
 import theme from '../../theme';
-import { FontAwesome } from '@expo/vector-icons';
+import { Ionicons  } from '@expo/vector-icons';
 
 export default function Home() {
   
@@ -28,7 +28,7 @@ export default function Home() {
       headerShown: true,
       headerTitle: '',
       headerRight: () => (
-        <FontAwesome name='user-circle' size={35} onPress={() => console.log('TESTE')} color={theme.colors['purple-800']}  />
+        <Ionicons  name='options' size={35} onPress={() => console.log('TESTE')} color={theme.colors['purple-800']}  />
       ),
     });
   }, [navigation]);

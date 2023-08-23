@@ -14,7 +14,7 @@ interface StepProps {
 export const StepTwo = ({ control, errors }: StepProps) => {
     // console.log({errors})
     return (
-      <View>
+      <View style={{ gap: 10 }}>
         <TextInput.Root error={errors.deformity} label='Deformidade *'> 
           <TextInput.Icon icon={'cog'} />
           <ControlledInput 

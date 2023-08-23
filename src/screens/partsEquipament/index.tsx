@@ -1,6 +1,5 @@
-import { Alert, View , Text, FlatList} from 'react-native';
+import {  View , FlatList} from 'react-native';
 import StepModal from '../../components/StepModal';
-
 import { SubmitHandler, FieldValues } from 'react-hook-form';
 import { StepOne, StepTwo, schema, StepCamera } from '../../modalForms/formsPartEquipament';
 import { Historic_partsEquip } from '../../lib/realm/schema/Historic';
@@ -19,15 +18,17 @@ type ItemProps = {
 }
 
 export default function PartsEquipament() {
-  const {createRecord, error, queryRealm } = useRealmCrud(Historic_partsEquip.generate,'historic_appointment_parts_equip2')
-  const realm = useRealm();
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const {createRecord, error, queryRealm } = useRealmCrud(Historic_partsEquip.generate,'historic_appointment_parts_equip4')
+  const selectAll = queryRealm()
 
-    console.log(data.image)
+  const data = selectAll?.toJSON().reverse()
+
+  const onSubmit: SubmitHandler<FieldValues> = (data) => {
     const submitValues  = {
       defect: Number(data.defect),
       deformated: Number(data.deformity),
-      image: data.image,
+      image: data.images,
       diff: Number(data.diff),
       obs: data.observation,
       shine: Number( data.shine),
@@ -38,9 +39,6 @@ export default function PartsEquipament() {
     createRecord(submitValues);
   };
   
-  const selectAll = queryRealm()
-  const [modalVisible, setModalVisible] = useState(false);
-
   const openModal = () => {
     setModalVisible(!modalVisible);
   };
@@ -49,11 +47,9 @@ export default function PartsEquipament() {
     setModalVisible(!modalVisible);
   };
 
-  console.log(error)
-  console.log(selectAll)
-
   const renderItem = ({ item }:ItemProps ) =>  {
-    
+    const image = (item.image[0] == undefined ? '' : item.image[0])
+
     return(
       <CardCep.Root 
         type='NORMAL'
@@ -62,8 +58,8 @@ export default function PartsEquipament() {
           flexDirection: 'row',
           alignItems: 'center'
         }}> 
-          <CardCep.Image url={item.image} />
-          <CardCep.Content id={item.shine + ''}  nameCep={item.tom + ''} date={item.created_date + ''}/>
+          <CardCep.Image url={image} />
+          <CardCep.Content id={item.defect}  nameCep={item.tom + ''} date={item.created_date.toString()}/>
       </View> 
       </CardCep.Root>
 
@@ -72,8 +68,6 @@ export default function PartsEquipament() {
   const ListItemSeparator = () => {
     return <View style={{ height: 10 }} />;
   };
-
-  const data = selectAll?.map(v => v.toJSON())
 
   return (
         
@@ -87,14 +81,11 @@ export default function PartsEquipament() {
             style={{ height: 20 }}
           />
         </S.Root.WrapperFlatList>
-
-
         <Modal
           isVisible={modalVisible}
           onSwipeComplete={closeModal}
           backdropColor="#2E2F42"
           backdropOpacity={0.8}
-     
           testID={'modal'}
           swipeDirection={['up', 'left', 'right', 'down']}
           style={{

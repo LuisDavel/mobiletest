@@ -1,10 +1,11 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, TouchableOpacity, Modal, ActivityIndicator } from 'react-native';
 import { Camera, CameraType, ImageType } from 'expo-camera';
 import Button from '../Button';
 
 import * as S from './styles'
 import { Ionicons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { handleFlashMode } from './handle-flash';
 import { toggleCameraType } from './handle-flipcam';
 
@@ -15,11 +16,11 @@ type CameraProps = {
 
 export function CameraComponent({ setValue, closeModal }: CameraProps) {
   const [permission, requestPermission] = Camera.useCameraPermissions();
+  const [images, setImages] = useState<string[]>([]);
   const [type, setType] = useState(CameraType.front);
   const [loading, setLoading] = useState(false);
   const [flashMode, setFlashMode] = useState(0);
   let camera: Camera;
-
   const takePicture = async () => {
     if (!camera) return;
     const photo = await camera.takePictureAsync({ 
@@ -29,9 +30,21 @@ export function CameraComponent({ setValue, closeModal }: CameraProps) {
       scale: 500,
       imageType: ImageType.jpg,
     });
-    setLoading(!loading)
-    if(photo) return setValue('image', photo.base64);  
+    setLoading(true)
+    if (!photo) return 
+
+    if(images.length === 3) {
+      setLoading(false)
+      return closeModal()
+    }
+    setImages((prevImages) => [...prevImages, photo.base64]);
+    setLoading(false)
+    // if(photo) return setValue('image', photo.base64);  
   };
+  
+  useEffect(() => {
+    setValue('images', images);
+  }, [images]);
 
   if (!permission) {
       return <View />;
@@ -60,17 +73,15 @@ export function CameraComponent({ setValue, closeModal }: CameraProps) {
   }
 
   const handleCameraClose = async () => {
-    await takePicture()
     return closeModal(); 
   };
 
   return (
     <View style={{ height: '100%',  backgroundColor: 'black' }}>
-        {loading && ( // Renderiza o indicador de loading se o estado 'loading' for true
+        {loading && ( 
           <ActivityIndicator
             style={{ height: '100%', backgroundColor: 'gray', opacity: 0.5 }}
             size="large"
-            // color="red"
           />
         )}
         <Camera
@@ -100,14 +111,17 @@ export function CameraComponent({ setValue, closeModal }: CameraProps) {
         </Camera>
       
         <S.Root.WrapperMenuOptionsCam onPress={handleCameraClose}>
+          {/* //Icon Exit Cam */}
           <TouchableOpacity
-          >
-            <Ionicons name="camera-reverse" size={40} color="black" />
-          </TouchableOpacity>
-          <S.Root.ViewSideCircle
             onPress={() => handleCameraClose()}
           >
-            <S.Root.ViewInsideCircle></S.Root.ViewInsideCircle>
+            <MaterialCommunityIcons name="camera-off" size={40} color="white" />
+          </TouchableOpacity>
+          {/* //Icon TakePicture Cam */}
+          <S.Root.ViewSideCircle
+            onPress={() => takePicture()}
+          >
+            <S.Root.ViewInsideCircle/>
           </S.Root.ViewSideCircle>
           {/* //Icon Reverser Cam */}
           <TouchableOpacity
@@ -115,6 +129,8 @@ export function CameraComponent({ setValue, closeModal }: CameraProps) {
           >
             <Ionicons name="camera-reverse" size={40} color="white" />
           </TouchableOpacity>
+
+          <Text style={{color: 'white'}}>{images.length}</Text>
         </S.Root.WrapperMenuOptionsCam>
     </View>
   );

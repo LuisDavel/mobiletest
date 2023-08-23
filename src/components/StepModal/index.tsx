@@ -18,17 +18,14 @@ interface StepModalProps {
 export default function StepModal({schema ,onSubmit, steps }: StepModalProps) {
   
   const [currentStep, setCurrentStep] = useState(1);
-  const [isVisible ,setIsVisible] = useState(true);
 
-  // const handleVisible = useCallback(() => {
-  //   setIsVisible(!isVisible);
-  // }, []);
-
-  const { control, handleSubmit, formState: { errors }, watch, setValue } = useForm({
+  const methods = useForm({
     resolver: yupResolver(schema)
   });
 
-  const componentElement = steps.map((Component, index) => <Component key={index} control={control} setValue={setValue} errors={errors} />)
+  const { control, handleSubmit, formState: { errors } } = methods;
+
+  const componentElement = steps.map((Component, index) => <Component key={index} control={control} methods={methods} errors={errors} />)
 
   const handleBack = () => {
     if (currentStep === 1) return

@@ -1,34 +1,34 @@
 import { View } from "react-native";
-import { ControlledInput } from "../../../components/ControlledInput";
-import { TextInput } from "../../../components/TextInput";
-import {Picker} from '@react-native-picker/picker';
 import { useCallback, useRef, useState } from "react";
-import { ControlledSelect } from "../../../components/ControlledSelect";
-import { Select } from "../../../components/Select";
 import { CameraComponent } from "../../../components/Camera";
 import Modal from 'react-native-modal';
-import Button from "../../../components/Button";
+import { CameraPreview } from "../../../components/CameraPreview";
+import { FieldValues, UseFormReturn } from "react-hook-form";
   
 interface StepProps {
-    control: any;
-    errors: any;
-    setValue: any;
-  }
+  methods: UseFormReturn<FieldValues, any, undefined>
+}
   
-export const StepCamera = ({ setValue }: StepProps) => {
+export const StepCamera = ({ methods }: StepProps) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const imageIsNotNull = methods.getValues().images
 
-  const openModal = () => {
+  const openModal = useCallback(() => {
     setModalVisible(true);
-  };
+  }, []);
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setModalVisible(false);
-  };
+  }, []);
 
   return (
-    <View>
-      <Button text="TesTe" type="PRIMARY" onPress={openModal} />
+    <View style={{ gap: 10 }}>
+      <CameraPreview.Root onPress={openModal}> 
+        <CameraPreview.Icon icon={'camera-plus-outline'}/>
+      </CameraPreview.Root>
+      <View style={{flexDirection: "row"}}>
+        {imageIsNotNull && imageIsNotNull.map((v: string, index: number) => (<CameraPreview.Content key={index} image={`data:image/png;base64, ${v}`} />))}
+      </View>
       <Modal
         isVisible={modalVisible}
         onSwipeComplete={() => !modalVisible}
@@ -40,7 +40,7 @@ export const StepCamera = ({ setValue }: StepProps) => {
           margin: 0,
         }}
       >
-        <CameraComponent setValue={setValue} closeModal={closeModal}/>
+        <CameraComponent setValue={methods.setValue} closeModal={closeModal}/>
       </Modal>
     </View>
   );

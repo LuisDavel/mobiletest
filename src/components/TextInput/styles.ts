@@ -16,7 +16,7 @@ const Error = styled.Text`
 `;
 
 const Text = styled.Text`
-  font-size: ${({ theme }) => theme.font.sizes.small} ;
+  font-size: 17px ;
   padding-bottom: 6px;
   color: ${({ theme }) => theme.colors['purple-900']};
 `;
@@ -28,7 +28,7 @@ const Icon = styled.View`
 const Input = styled.TextInput`
   width: 90%;
   padding: 10px;
-  font-size: ${({ theme }) => theme.font.sizes.medium} ;
+  font-size: 16px ;
   color: ${({ theme }) => theme.colors['purple-800']};
   /* border-bottom: 4px solid red; */
 `;

@@ -9,7 +9,7 @@ type GenerateProps = {
   texture: number;
   tom: number;
   tonality: number;
-  image: string;
+  image: string[];
   created_date: Date;
 };
 
@@ -51,12 +51,12 @@ export class Historic_partsEquip extends Realm.Object {
   }
 
   static schema: Realm.ObjectSchema = {
-    name: 'historic_appointment_parts_equip2',
+    name: 'historic_appointment_parts_equip4',
     primaryKey: '_id',
 
     properties: {
       _id: 'uuid',
-      image: 'string', // It seems like there's a typo here, it should be 'image'
+      image: 'string[]',
       defect: 'double',
       deformated: 'double',
       diff: 'double',

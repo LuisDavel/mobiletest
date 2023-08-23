@@ -6,6 +6,7 @@ import { Routes } from './src/routes';
 import 'react-native-get-random-values';
 import { RealmProvider } from './src/lib/realm';
 import { NetInfoProvider } from './src/hooks/netInfoContext';
+import DrawerLayout from './src/components/DrawerLayout';
 
 export default function App() {
   return (
@@ -13,7 +14,9 @@ export default function App() {
        <SafeAreaProvider>
         <RealmProvider>
           <NetInfoProvider>
+            <DrawerLayout>
               <Routes />
+            </DrawerLayout>
           </NetInfoProvider>
         </RealmProvider>
        </SafeAreaProvider>
