@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useRealm, useQuery } from '../lib/realm';
+import { Alert } from 'react-native';
 
 type GenerateFunction<T> = (data: any) => T;
 
@@ -20,13 +21,28 @@ const useRealmCrud = <T extends Realm.Object>(
         realm.create(tableName, generate(data));
       });
     } catch (err: any) {
+      Alert.alert(`Error `, `Informe o erro ao administrador do sistema:\n\n${error}`  )
+      setError(err);
+    }
+  };
+
+  const deleteRecord = (id: any) => {
+    try {
+      const itemToDelete = realm.objectForPrimaryKey(tableName, id);
+      if (itemToDelete) {
+        realm.write(() => {
+          realm.delete(itemToDelete);
+        });
+      }
+    } catch (err: any) {
+      Alert.alert(`Error`, `Informe o erro ao administrador do sistema:\n\n${error}`);
       setError(err);
     }
   };
 
   const queryRealm = () => {
     try {
-        return query
+      return query
     } catch (err: any) {
       setError(err);
     }
@@ -35,6 +51,7 @@ const useRealmCrud = <T extends Realm.Object>(
   return {
     queryRealm,
     createRecord,
+    deleteRecord,
     error,
   };
 };

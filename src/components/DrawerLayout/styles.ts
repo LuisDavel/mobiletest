@@ -2,32 +2,37 @@
 import  styled  from 'styled-components/native';
 import theme from '../../theme';
 
-type WrapperProps = {
-  color?: string
-  size?: string
-  align?: 'center'  | 'flex-end'  | 'flex-start'
-  justify?: 'center'  | 'flex-end'  | 'flex-start'  | 'space-around'  | 'space-between' | 'space-evenly'
-  p?: string 
-}
-
-const Wrapper = styled.Pressable`
+const BarContainerBottom = styled.Pressable`
   align-self: center;
-  height: 10px;
+  height: 12px;
   border-radius: 8px;
-  width: 50%;
-  background-color: ${theme.colors['navy-900']};
-  margin-bottom: 5px;
+  width: 45%;
+  position: absolute;
+  /* top: 0; */
+  bottom: 8px;
+  background-color: ${theme.colors.white[700]};
+  `;
+
+const BarContainerTop = styled.View`
+  align-self: center;
+  height: 12px;
+  border-radius: 8px;
+  width: 45%;
+  background-color: ${theme.colors.white['700']};
+  margin-bottom: 15px;
 `;
 
 const WrapperContent = styled.View`
+  position: relative;
   align-self: center;
-  height: 500px;
   border-radius: 8px 8px 0 0;
   width: 100%;
-  background-color: ${theme.colors['navy-900']};
+  padding: ${theme.spacings.medium};
+  background-color: white;
 `;
 
 export const Root = {
-  Wrapper: Wrapper,
+  BarContainerBottom: BarContainerBottom,
+  BarContainerTop: BarContainerTop,
   WrapperContent: WrapperContent
 };

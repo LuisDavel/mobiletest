@@ -15,13 +15,13 @@ type GenerateProps = {
 
 export class Historic_partsEquip extends Realm.Object {
   defect!: number;
-  deformated!: number;
-  diff!: number;
+  deformated!: string;
+  diff!: string;
   obs!: string;
-  shine!: number;
-  texture!: number;
+  shine!: string;
+  texture!: string;
   tom!: number;
-  tonality!: number;
+  tonality!: string;
 
   static generate({
     defect,
@@ -51,20 +51,20 @@ export class Historic_partsEquip extends Realm.Object {
   }
 
   static schema: Realm.ObjectSchema = {
-    name: 'historic_appointment_parts_equip4',
+    name: 'historic_appointment_parts_equip5',
     primaryKey: '_id',
 
     properties: {
       _id: 'uuid',
       image: 'string[]',
       defect: 'double',
-      deformated: 'double',
-      diff: 'double',
+      deformated: 'string',
+      diff: 'string',
       obs: 'string',
-      shine: 'double',
-      texture: 'double',
+      shine: 'string',
+      texture: 'string',
       tom: 'double',
-      tonality: 'double',
+      tonality: 'string',
       created_date: 'date', // Change the data type to 'date'
     },
   };

@@ -1,13 +1,13 @@
 import * as yup from "yup"
 
 export const schema = yup.object({
-    tom: yup.string().required("Informar registro"),
-    defect: yup.string().required("Informar registro"),
+    tom: yup.string().required("Este campo é obrigatório"),
+    defect: yup.string().required("Este campo é obrigatório"),
     observation: yup.string(),
     image: yup.string(),
-    tonality: yup.string().required("Informar registro"),
-    texture: yup.string().required("Informar registro"),
-    shine: yup.string().required("Informar registro"),
-    deformity: yup.string().required("Informar registro"),
-    diff: yup.string().required("Informar registro")
+    tonality: yup.string().required("Este campo é obrigatório"),
+    texture: yup.string().required("Este campo é obrigatório"),
+    shine: yup.string().required("Este campo é obrigatório"),
+    deformity: yup.string().required("Este campo é obrigatório"),
+    diff: yup.string().required("Este campo é obrigatório")
 })

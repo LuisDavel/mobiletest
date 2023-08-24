@@ -1,6 +1,8 @@
 import { View } from "react-native";
 import { ControlledInput } from "../../../components/ControlledInput";
 import { TextInput } from "../../../components/TextInput";
+import { Select } from "../../../components/Select";
+import { ControlledSelect } from "../../../components/ControlledSelect";
 interface StepProps {
     control: any;
     errors: any;
@@ -12,42 +14,52 @@ interface StepProps {
   }
   
 export const StepTwo = ({ control, errors }: StepProps) => {
-    // console.log({errors})
+  const defects = 
+    [
+      {
+      label: 'Defeito 1',
+      value: 1
+      },
+      {
+      label: 'Defeito 2',
+      value: 2
+      },
+    ]
+
+    const item = 
+    [
+      {
+      label: 'Conforme',
+      value: 'Conforme'
+      },
+      {
+      label: 'Não conforme',
+      value: 'Não conforme'
+      },
+    ]
+
     return (
       <View style={{ gap: 10 }}>
-        <TextInput.Root error={errors.deformity} label='Deformidade *'> 
-          <TextInput.Icon icon={'cog'} />
-          <ControlledInput 
-            name='deformity'
-            control={control}
-            placeholder='Insira um valor'
-          />
-        </TextInput.Root>
-        <TextInput.Root error={errors.diff} label='Diferença de tonalidade lados da mesma peça *'> 
-          <TextInput.Icon icon={'cog'} />
-          <ControlledInput 
-            name='diff'
-            control={control}
-            placeholder='Insira um valor'
-          />
-        </TextInput.Root>
-        <TextInput.Root error={errors.defect} label='Defeito *'> 
-          <TextInput.Icon icon={'cog'} />
-          <ControlledInput 
-            name='defect'
-            control={control}
-            placeholder='Insira um valor'
-          />
-        </TextInput.Root>
-        <TextInput.Root error={errors.observation} label='Observação *'> 
-          <TextInput.Icon icon={'cog'} />
+        <Select.Root error={errors.defect} label='Defeito *'> 
+          <ControlledSelect item={defects} control={control} placeholder='Selecione um defeito' name="defect"  />
+        </Select.Root>
+
+        <TextInput.Root error={errors.observation} label='Observação'> 
           <ControlledInput 
             name='observation'
             multiline
             control={control}
-            placeholder='Insira um valor'
+            placeholder='Insira uma observação do defeito'
           />
         </TextInput.Root>
+
+        <Select.Root error={errors.deformity} label='Deformidade *'> 
+          <ControlledSelect item={item} control={control} placeholder='Selecione uma deformidade' name="deformity"  />
+        </Select.Root>
+
+        <Select.Root error={errors.diff} label='Diferença de tonalidade da mesma peça *'> 
+          <ControlledSelect item={item} control={control} placeholder='Selecione um valor' name="diff"  />
+        </Select.Root>
       </View>
     );
   };

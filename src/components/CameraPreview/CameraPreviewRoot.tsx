@@ -16,7 +16,7 @@ export default function CameraPreviewsRoot( {children, index = 0, ...props}: Car
   });
 
   function onPressIn() {
-    scale.value = withTiming(1.1);
+    scale.value = withTiming(1.04);
   }
 
   function onPressOut() {

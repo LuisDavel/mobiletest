@@ -21,7 +21,7 @@ const Text = styled.Text`
   color: ${({ theme }) => theme.colors['purple-900']};
 `;
 
-const Icon = styled.View`
+const Icon = styled.Pressable`
   padding-left: 10px;
 `;
 

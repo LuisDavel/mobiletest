@@ -8,6 +8,7 @@ import theme from '../theme';
 import { createStackNavigator } from '@react-navigation/stack';
 import { handleGoBack } from './handle-goback';
 import PartsEquipament from '../screens/partsEquipament';
+import Login from '../screens/login';
 
 export function AppRoutes() {
   const Tab = createBottomTabNavigator();
@@ -23,7 +24,6 @@ export function AppRoutes() {
         sceneContainerStyle={{
           backgroundColor: 'white',
           padding: 15,
-       
         }}
         screenOptions={{
           headerShown: false,
@@ -33,7 +33,6 @@ export function AppRoutes() {
             ...tabBarStyles}
         }}
       >
-
         <Tab.Screen
           name="home"
           component={Home}
@@ -44,16 +43,13 @@ export function AppRoutes() {
          <Tab.Screen name="backHistory" component={LogoutComponent} options={({navigation}) => ({
           tabBarIcon: ({focused}) => <FontAwesome name='history' onPress={() => handleGoBack(navigation)  } size={focused ? 30 : 25} color={ focused ? 'white' : theme.colors.white['700']}  /> 
         })} />
-
       </Tab.Navigator>
-      
     );
   }
   
   return (
       <Navigator 
-        initialRouteName="main" 
-
+        initialRouteName="login" 
         screenOptions={{
           headerShown: false,
           headerShadowVisible: false,
@@ -62,7 +58,10 @@ export function AppRoutes() {
         <Screen
           name="main"
           component={MainTab}
-          
+        />
+        <Screen
+          name="login"
+          component={Login}
         />
         <Screen
           name="appointment"

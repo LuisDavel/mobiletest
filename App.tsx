@@ -1,4 +1,4 @@
-import { StatusBar } from 'react-native';
+// import * as  from '@env'
 import { ThemeProvider } from 'styled-components/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import theme from './src/theme';
@@ -7,6 +7,7 @@ import 'react-native-get-random-values';
 import { RealmProvider } from './src/lib/realm';
 import { NetInfoProvider } from './src/hooks/netInfoContext';
 import DrawerLayout from './src/components/DrawerLayout';
+import { ModalProvider } from './src/hooks/modalOpenContext';
 
 export default function App() {
   return (
@@ -14,9 +15,11 @@ export default function App() {
        <SafeAreaProvider>
         <RealmProvider>
           <NetInfoProvider>
-            <DrawerLayout>
-              <Routes />
-            </DrawerLayout>
+            <ModalProvider>
+              <DrawerLayout>
+                <Routes />
+              </DrawerLayout>
+            </ModalProvider>
           </NetInfoProvider>
         </RealmProvider>
        </SafeAreaProvider>
