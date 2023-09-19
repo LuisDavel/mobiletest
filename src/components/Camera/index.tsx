@@ -17,7 +17,7 @@ type CameraProps = {
 export function CameraComponent({ setValue, closeModal }: CameraProps) {
   const [permission, requestPermission] = Camera.useCameraPermissions();
   const [images, setImages] = useState<string[]>([]);
-  const [type, setType] = useState(CameraType.front);
+  const [type, setType] = useState(CameraType.back);
   const [loading, setLoading] = useState(false);
   const [flashMode, setFlashMode] = useState(0);
   let camera: Camera;

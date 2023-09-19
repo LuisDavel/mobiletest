@@ -3,17 +3,21 @@ import { FadeInUp, FadeOutUp } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { useModalContext } from '../../hooks/modalOpenContext';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import LogoSvg from '../../assets/images/svg/teste.svg'
 import Button from '../../components/Button';
 import { encode, decode, fromUint8Array } from 'js-base64';
+
+import { EXPO_PUBLIC_API_URL } from "@env"
 
 import { TextInput } from '../../components/TextInput';
 import { ControlledInput } from '../../components/ControlledInput';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup"
-import { api } from '../../lib/axios/axios';
+import { api } from '../../utils/axios/axios';
+import { storeData } from '../../utils/storage/handle-storage';
+import axios from 'axios';
 
 const schema = yup.object({
   user: yup.string().required("Este campo é obrigatório"),
@@ -21,8 +25,10 @@ const schema = yup.object({
 })
 
 export default function Login() {
+
   const navigation = useNavigation()
   const { toggleModal } = useModalContext();
+  const [msg, setMsg] = useState('false');
   const [togglePass, setTogglePass] = useState(false);
   const methods = useForm({
     resolver: yupResolver(schema)
@@ -44,22 +50,32 @@ export default function Login() {
     const dataEncode2 = encode(dataEncode)
     const dataEncode3 = `iforth ${encode(dataEncode2)}`
     try {
-      
       const crip = await api.get('v1/crip', {
         headers: { iforthsistemas: dataEncode3 }
       })
-
       const basic = await api.post('v1/basic', crip.data)
       const token = await api.post('v1/token', basic.data)
-      toggleModal()
-      if(token.status == 200) return navigation.navigate('main')
-    } catch (err) {
+      
+      if(token.status == 200)  {
+        toggleModal()
+        storeData({ data: token.data, key:'@iforth_login'})
+        return navigation.navigate('main')
+      }
+      
+    } catch (error) {
+      if(axios.isAxiosError(error)){
+        // setMsg(error.toJSON())
+        console.log('==========================================================')
+        console.log(error.toJSON())
+        console.log('==========================================================')
+      }
+      // setMsg(error)
+      console.log('==========================================================')
+      console.log(error)
+      console.log('==========================================================')
+    }
+  };
 
-  console.log(err)
-}
-
-
-};
 return (
   <S.Root.Wrapper
       entering={FadeInUp}
@@ -76,6 +92,8 @@ return (
           <ControlledInput name='pass' secureTextEntry={!togglePass} control={control} placeholder='Insira sua senha' />
         </TextInput.Root>
       </View>
+      {/* <Text>{msg}</Text> */}
+      {/* <Text>{EXPO_PUBLIC_API_URL}</Text> */}
       <Button text='Entrar' type='PRIMARY' onPress={handleSubmit(onSubmit)}/>
     </S.Root.Wrapper>
   );

@@ -1,16 +1,18 @@
-import {  View , FlatList} from 'react-native';
+import {  View , FlatList, Alert} from 'react-native';
 import StepModal from '../../components/StepModal';
 import { SubmitHandler, FieldValues } from 'react-hook-form';
 import { StepOne, StepTwo, schema, StepCamera } from '../../modalForms/formsPartEquipament';
-import { Historic_partsEquip } from '../../lib/realm/schema/Historic';
+import { Historic_partsEquip } from '../../lib/realm/schema/historic_parts';
 import useRealmCrud from '../../hooks/useCrud';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from 'react-native-modal';
 
 import * as S from './styles'
 import { CardCep } from '../../components/CardCep';
 import Button from '../../components/Button';
+import { api, getDataStorage } from '../../utils';
+import { useNetInfo } from '../../hooks/netInfoContext';
 
 type ItemProps = {
   item: typeof Historic_partsEquip.schema.properties
@@ -18,11 +20,13 @@ type ItemProps = {
 
 export default function PartsEquipament() {
   const [modalVisible, setModalVisible] = useState(false);
+  const [filterResult, setFilterResult] = useState(null);
+  const { isConnected } = useNetInfo()
   const {createRecord, error, queryRealm, deleteRecord} = useRealmCrud(Historic_partsEquip.generate,'historic_appointment_parts_equip5')
+  
   const selectAll = queryRealm()
 
   const data = selectAll?.toJSON().reverse()
-  
   const openModal = () => {
     setModalVisible(!modalVisible);
   };
@@ -31,19 +35,43 @@ export default function PartsEquipament() {
     setModalVisible(!modalVisible);
   };
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+  useEffect(() => {
+    getDataStorage({key: '@iforth_filter'}).then(result => {
+      setFilterResult(JSON.parse(result));
+      }
+    )
+  }, [])
+
+  
+
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+
+    if(!filterResult) return null
     const submitValues  = {
-      defect: Number(data.defect),
-      deformated:data.deformity,
-      image: data.images,
-      diff: data.diff,
-      obs: data.observation,
-      shine:  data.shine,
-      texture: data.texture,
-      tom: Number(data.tom),
-      tonality: data.tonality,
+      IDUSUARIO: 3,
+      IDUNIDADE:filterResult.unit,
+      IDLINHA: filterResult.line,
+      IDDEFEITO: Number(data.defect),
+      DEFORMADOCEPPECAADIANTADA: Number(data.deformity),
+      IMAGEM: data.images,
+      DIFTONCEPPECAADIANTADA: Number(data.diff),
+      OBSCEPPECAADIANTADA: data.observation,
+      BRILHOCEPPECAADIANTADA:  Number(data.shine),
+      TEXTURACEPPECAADIANTADA: Number(data.texture),
+      TOMCEPPECAADIANTADA: Number(data.tom),
+      TONCEPPECAADIANTADA: Number(data.tonality),
     }
-    createRecord(submitValues);
+
+    if(!isConnected){
+      createRecord(submitValues);
+      return closeModal()
+    } 
+    
+    const post = await api.post('/v2/cq/peca-adiantada/', submitValues)
+    if(post.status != 200){
+      return Alert.alert('Alert Title',
+      'My Alert Msg')
+    }
     return closeModal()
   };
 
@@ -60,7 +88,7 @@ export default function PartsEquipament() {
           alignItems: 'center'
         }}> 
           <CardCep.Image url={image} />
-          <CardCep.Content id={item.defect}  nameCep={item.tom + ''} date={item.created_date.toString()}/>
+          <CardCep.Content id={item.defect} nameCep={item.tom + ''} date={item.created_date.toString()}/>
       </View> 
       </CardCep.Root>
   )};

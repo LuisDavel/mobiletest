@@ -21,11 +21,11 @@ export const StepOne = ({ control, errors }: StepProps) => {
       [
         {
         label: 'Conforme',
-        value: 'Conforme'
+        value: 0
         },
         {
         label: 'Não conforme',
-        value: 'Não conforme'
+        value: 1
         },
       ]
 

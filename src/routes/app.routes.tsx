@@ -9,6 +9,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { handleGoBack } from './handle-goback';
 import PartsEquipament from '../screens/partsEquipament';
 import Login from '../screens/login';
+import { MaterialIcons } from '@expo/vector-icons';
 
 export function AppRoutes() {
   const Tab = createBottomTabNavigator();
@@ -40,16 +41,20 @@ export function AppRoutes() {
             tabBarIcon: ({focused}) => <FontAwesome name='home'  size={focused ? 30 : 25} color={ focused ? 'white' : theme.colors.white['700']}  /> 
           }}
         />
-         <Tab.Screen name="backHistory" component={LogoutComponent} options={({navigation}) => ({
-          tabBarIcon: ({focused}) => <FontAwesome name='history' onPress={() => handleGoBack(navigation)  } size={focused ? 30 : 25} color={ focused ? 'white' : theme.colors.white['700']}  /> 
-        })} />
+        <Tab.Screen 
+          name="backHistory" 
+          component={LogoutComponent} 
+          options={{
+            tabBarIcon: ({focused}) => <MaterialIcons name='sync' size={focused ? 30 : 25} color={ focused ? 'white' : theme.colors.white['700']}  /> 
+          }} 
+        />
       </Tab.Navigator>
     );
   }
   
   return (
       <Navigator 
-        initialRouteName="login" 
+        initialRouteName="home" 
         screenOptions={{
           headerShown: false,
           headerShadowVisible: false,

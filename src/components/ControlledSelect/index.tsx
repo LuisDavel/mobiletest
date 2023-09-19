@@ -1,9 +1,9 @@
 import React from 'react';
 import { Controller, Control } from "react-hook-form"
 import { InputProps } from '../TextInput/InputContent';
-import { Picker } from '@react-native-picker/picker';
+import { Picker, PickerProps } from '@react-native-picker/picker';
 // import * as S from './styles';
-type Props = {
+type Props<T> = {
     control: Control<any>
     name: string
     placeholder?: string
@@ -11,9 +11,10 @@ type Props = {
         label: string,
         value: string | number
     }[]
-} & InputProps
+    onValueChanged?: (val: any) => void
+} & PickerProps<T>
 
-export function ControlledSelect({ control, name, item, placeholder, ...props }: Props) {
+export function ControlledSelect({ control, name, item, placeholder, onValueChanged, ...props }: Props<T>) {
 
     return (
         <Controller
@@ -22,7 +23,13 @@ export function ControlledSelect({ control, name, item, placeholder, ...props }:
             render={({ field: { onChange, value }})=> (
                 <Picker
                     selectedValue={value}
-                    onValueChange={onChange}
+                    onValueChange={(val) => {
+                        onChange(val)
+                        if(!!onValueChanged) {
+                            onValueChanged(val) 
+                        }
+                    }}
+                    {...props}
                 >
                     <Picker.Item label={placeholder || "Selecione"} value={null} enabled={true} />
                     {item.map((v, key) => ( 

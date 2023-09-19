@@ -24,6 +24,7 @@ export const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
+    // console.log('teste toggle' + isModalOpen)
   };
 
   const contextValue: ModalContextType = {

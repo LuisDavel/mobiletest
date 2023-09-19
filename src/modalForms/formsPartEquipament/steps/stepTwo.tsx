@@ -3,45 +3,46 @@ import { ControlledInput } from "../../../components/ControlledInput";
 import { TextInput } from "../../../components/TextInput";
 import { Select } from "../../../components/Select";
 import { ControlledSelect } from "../../../components/ControlledSelect";
+import useRealmCrud from "../../../hooks/useCrud";
+import { Historic_defect } from "../../../lib/realm/schema/historic_defect";
+import { addLabelAndValue } from "../../../utils";
 interface StepProps {
     control: any;
     errors: any;
   }
   
+type OptionProps = {
+    descdefeito: string, 
+    iddefeito: number  
+}[]
+
 interface StepProps {
     control: any;
     errors: any;
   }
   
 export const StepTwo = ({ control, errors }: StepProps) => {
-  const defects = 
-    [
-      {
-      label: 'Defeito 1',
-      value: 1
-      },
-      {
-      label: 'Defeito 2',
-      value: 2
-      },
-    ]
-
+  const { queryRealm } = useRealmCrud(Historic_defect.generate,'historic_defect');
+  const defects = queryRealm()?.toJSON()
+  // console.log(defects)
+  const transformedOptions = addLabelAndValue(defects, 'desc_defect', 'id_defect');
+  
     const item = 
     [
       {
       label: 'Conforme',
-      value: 'Conforme'
+      value: 0
       },
       {
       label: 'Não conforme',
-      value: 'Não conforme'
+      value: 1
       },
     ]
 
     return (
       <View style={{ gap: 10 }}>
         <Select.Root error={errors.defect} label='Defeito *'> 
-          <ControlledSelect item={defects} control={control} placeholder='Selecione um defeito' name="defect"  />
+          <ControlledSelect item={transformedOptions} control={control} placeholder='Selecione um defeito' name="defect"  />
         </Select.Root>
 
         <TextInput.Root error={errors.observation} label='Observação'> 
